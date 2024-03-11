@@ -12,6 +12,11 @@ class loginpage extends StatelessWidget {
   TextEditingController passcontroller = TextEditingController();
 
   TextEditingController emailontroller = TextEditingController();
+  final regemail = RegExp(r"^[a-zA-Z0-9_\-\.\S]{4,}[@][a-z]+[\.][a-z]{2,3}$");
+  final paswd =
+      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,101 +36,119 @@ class loginpage extends StatelessWidget {
         ),
       ),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 300,
-              child: Center(
-                child: Text(
-                  "LOG IN",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 300,
+                child: Center(
+                  child: Text(
+                    "LOG IN",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                  ),
                 ),
               ),
-            ),
-            CustomTextfield(
-                controller: emailontroller,
-                icon: Icons.email_outlined,
-                text: "Enter Email"),
-            const Sizedbox20(),
-            CustomTextfield(
-                controller: passcontroller,
-                icon: Icons.lock_open_rounded,
-                text: "Enter Password"),
-            const SizedBox(
-              height: 25,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: custombutton(
-                text: "LOG IN",
-                onpressed: () async {
-                  Authontification.signin(
-                      emailontroller.text, passcontroller.text, context);
-                },
+              CustomTextfield(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "please enter a valid email";
+                    } else if (!regemail.hasMatch(value)) {
+                      return "please enter a valid email";
+                    }
+                  },
+                  controller: emailontroller,
+                  icon: Icons.email_outlined,
+                  text: "Enter Email"),
+              const Sizedbox20(),
+              CustomTextfield(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "please enter a password";
+                    } else if (!paswd.hasMatch(value)) {
+                      return 'Password should contain at least one upper case, \n one lower case, one digit, one special character and \n must be 8 characters in length';
+                    }
+                  },
+                  controller: passcontroller,
+                  icon: Icons.lock_open_rounded,
+                  text: "Enter Password"),
+              const SizedBox(
+                height: 25,
               ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "Dont't have account ",
-                  style: TextStyle(color: Colors.white54),
-                ),
-                GestureDetector(
-                  child: const Text(
-                    " Sign Up",
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: custombutton(
+                    text: "LOG IN",
+                    onpressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        Authontification.signin(
+                            emailontroller.text, passcontroller.text, context);
+                      }
+                    }),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Dont't have account ",
+                    style: TextStyle(color: Colors.white54),
+                  ),
+                  GestureDetector(
+                    child: const Text(
+                      " Sign Up",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => SignupPage(),
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+              const Sizedbox20(),
+              const Row(
+                children: [
+                  SizedBox(
+                    width: 165,
+                    child: Divider(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    " OR ",
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => SignupPage(),
-                      ),
-                    );
-                  },
-                )
-              ],
-            ),
-            const Sizedbox20(),
-            const Row(
-              children: [
-                SizedBox(
-                  width: 165,
-                  child: Divider(
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  " OR ",
-                  style: TextStyle(color: Colors.white),
-                ),
-                SizedBox(
-                  width: 165,
-                  child: Divider(
-                    color: Colors.white,
-                  ),
-                )
-              ],
-            ),
-            const Sizedbox20(),
-            Center(
-              child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                  ),
-                  child: const Image(
-                      image: AssetImage(
-                    "assets/google.png",
-                    // fit: BoxFit.fill,
-                  ))),
-            )
-          ],
+                  SizedBox(
+                    width: 165,
+                    child: Divider(
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+              const Sizedbox20(),
+              Center(
+                child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                    child: const Image(
+                        image: AssetImage(
+                      "assets/google.png",
+                      // fit: BoxFit.fill,
+                    ))),
+              )
+            ],
+          ),
         ),
       ),
     );

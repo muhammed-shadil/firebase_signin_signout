@@ -6,7 +6,7 @@ class CustomTextfield extends StatelessWidget {
     required this.icon,
     required this.text,
     this.validator,
-     this.controller,
+    this.controller,
   }) : super(key: key);
   final IconData icon;
   final String? Function(String?)? validator;
@@ -18,13 +18,14 @@ class CustomTextfield extends StatelessWidget {
       controller: controller,
       validator: validator,
       cursorColor: Colors.white,
-      decoration: InputDecoration(
+      decoration: InputDecoration(errorMaxLines: 3,
+        errorStyle: const TextStyle(color: Colors.white, fontSize: 16),
         prefixIcon: Icon(
           icon,
           color: Colors.white,
         ),
-        labelText: text,
-        labelStyle: TextStyle(
+        hintText: text,
+        hintStyle: TextStyle(
           fontSize: 20,
           color: Colors.white.withOpacity(0.9),
         ),

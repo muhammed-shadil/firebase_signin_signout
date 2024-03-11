@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_login/model/user_model.dart';
 import 'package:flutter/material.dart';
 
 class Authontification {
@@ -28,16 +30,35 @@ class Authontification {
     }
   }
 
-  static signup(String email, String password, BuildContext context) async {
+  static signup(String age,String phone,String username,String email, String password, BuildContext context) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       await FirebaseAuth.instance.currentUser!.updateDisplayName(email);
-      ScaffoldMessenger.of(context).showSnackBar(
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text("registeration successfull"),
+      //   ),
+      // );
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      User? user = FirebaseAuth.instance.currentUser;
+
+      usermodel usermode = usermodel();
+
+
+      usermode.uid=user!.uid;
+      usermode.email=user!.email;
+      usermode.age=age;
+      usermode.phone=phone;
+      usermode.username=username;
+  await firebaseFirestore.collection("users").doc(user.uid).set(usermode.toMap());
+
+   ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("registeration successfull"),
+          content: Text("registeration successfully"),
         ),
       );
+
     } on FirebaseException catch (e) {
       if (e.code == 'weak-password') {
         ScaffoldMessenger.of(context).showSnackBar(
