@@ -1,4 +1,5 @@
 import 'package:firebase_login/controller/auth_controller.dart';
+import 'package:firebase_login/view/screen/homepage.dart';
 import 'package:firebase_login/view/screen/signuppage.dart';
 import 'package:firebase_login/view/widgets/custombutton1.dart';
 import 'package:firebase_login/view/widgets/customtextfield1.dart';
@@ -52,7 +53,7 @@ class loginpage extends StatelessWidget {
               CustomTextfield(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "please enter a valid email";
+                      return "please enter a email";
                     } else if (!regemail.hasMatch(value)) {
                       return "please enter a valid email";
                     }
@@ -83,7 +84,7 @@ class loginpage extends StatelessWidget {
                       if (formKey.currentState!.validate()) {
                         Authontification.signin(
                             emailontroller.text, passcontroller.text, context);
-                      }
+                       }
                     }),
               ),
               const SizedBox(
@@ -113,21 +114,21 @@ class loginpage extends StatelessWidget {
                 ],
               ),
               const Sizedbox20(),
-              const Row(
+               Row(
                 children: [
                   SizedBox(
-                    width: 165,
-                    child: Divider(
+                    width: MediaQuery.of(context).size.width*.43,
+                    child: const Divider(
                       color: Colors.white,
                     ),
                   ),
-                  Text(
+                  const Text(
                     " OR ",
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(
-                    width: 165,
-                    child: Divider(
+                    width: MediaQuery.of(context).size.width*.41,
+                    child: const Divider(
                       color: Colors.white,
                     ),
                   )

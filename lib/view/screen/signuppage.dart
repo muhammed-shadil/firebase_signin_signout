@@ -137,10 +137,7 @@ class SignupPage extends StatelessWidget {
                             emailcontroller.text,
                             passcontroller.text,
                             context);
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (_) => Homepage()),
-                            (route) => false);
+                        // Navigator.pop(context);
                       }
                     }),
               ],

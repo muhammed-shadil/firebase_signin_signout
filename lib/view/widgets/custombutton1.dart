@@ -12,12 +12,12 @@ class custombutton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        fixedSize: Size(400, 50)
+        fixedSize: const Size(400, 50)
       ),
       onPressed: onpressed,
       child: Text(
         text,
-        style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 17,fontWeight: FontWeight.bold),
       ),
     );
   }

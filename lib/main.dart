@@ -18,20 +18,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: ((context, snapshot) {
-            if (snapshot.hasData) {
-              return  Homepage();
-            } else {
-              return  loginpage();
-            }
-          }),
-        ),
-      ),
+      home: Scaffold(body: loginpage()),
     );
   }
 }
