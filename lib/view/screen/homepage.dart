@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_login/controller/image_controler.dart';
 import 'package:firebase_login/model/user_model.dart';
 import 'package:firebase_login/view/widgets/custombutton1.dart';
 import 'package:firebase_login/view/widgets/customcontainertile.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -13,6 +15,15 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  void selectImage() async {
+    String? img = await pickImage(context, ImageSource.gallery);
+    setState(() {
+      imageUrl = img;
+      print(imageUrl);
+    });
+  }
+  
+
   User? user = FirebaseAuth.instance.currentUser;
   usermodel usermode = usermodel();
   @override
@@ -41,7 +52,7 @@ class _HomepageState extends State<Homepage> {
           },
         ),
         backgroundColor: Colors.transparent,
-        title: const Text('HOME'),
+        title: const Text('HOME',style: TextStyle(color: Colors.white),),
         centerTitle: true,
         actions: [
           IconButton(
@@ -63,14 +74,20 @@ class _HomepageState extends State<Homepage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Stack(children: [
-                const CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 60,
-                  child: Icon(
-                    Icons.image,
-                    size: 100,
-                  ),
-                ),
+                imageUrl != null
+                
+                    ? CircleAvatar(
+                        radius: 60,
+                        backgroundImage: NetworkImage(imageUrl!),
+                      )
+                    : const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 60,
+                        child: Icon(
+                          Icons.image,
+                          size: 100,
+                        ),
+                      ),
                 Positioned(
                     bottom: 4,
                     right: 4,
@@ -78,7 +95,9 @@ class _HomepageState extends State<Homepage> {
                       backgroundColor: Colors.white,
                       radius: 15,
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            selectImage();
+                          },
                           icon: const Icon(
                             Icons.edit,
                             size: 17,
@@ -86,7 +105,7 @@ class _HomepageState extends State<Homepage> {
                     ))
               ]),
               SizedBox(
-                height: 100,
+                height: 90,
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(

@@ -8,10 +8,10 @@ class Profiletile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(  top: 10),
-      child: Container(padding: const EdgeInsets.only(top: 10,left: 15),
+      child: Container(padding: const EdgeInsets.only(top: 10,left: 15,bottom: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20), color: Colors.white12),
-        height: MediaQuery.of(context).size.height * .1,
+       
         width: 400,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
