@@ -42,7 +42,7 @@ class loginpage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(
-                height: 300,
+                height: 220,
                 child: Center(
                   child: Text(
                     "LOG IN",
@@ -84,7 +84,8 @@ class loginpage extends StatelessWidget {
                       if (formKey.currentState!.validate()) {
                         Authontification.signin(
                             emailontroller.text, passcontroller.text, context);
-                       }
+                            emailontroller.clear();
+                            passcontroller.clear();                       }
                     }),
               ),
               const SizedBox(
@@ -136,17 +137,19 @@ class loginpage extends StatelessWidget {
               ),
               const Sizedbox20(),
               Center(
-                child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                    ),
-                    child: const Image(
-                        image: AssetImage(
-                      "assets/google.png",
-                      // fit: BoxFit.fill,
-                    ))),
+                child: GestureDetector(onTap: (){Authontification.signInWithGoogle(context);},
+                  child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: const BoxDecoration(color: Colors.amber,
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: const Image(
+                          image: AssetImage(
+                        "assets/google.png",
+                        // fit: BoxFit.fill,
+                      ))),
+                ),
               )
             ],
           ),

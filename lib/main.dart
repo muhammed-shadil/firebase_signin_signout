@@ -13,14 +13,32 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    user = FirebaseAuth.instance.currentUser;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: loginpage()),
+      home: Scaffold(body: user != null ? const Homepage() : loginpage()),
+      routes: {
+        '/login':(context) => loginpage(),
+        '/home':(context) => Homepage(),
+      },
     );
   }
 }
