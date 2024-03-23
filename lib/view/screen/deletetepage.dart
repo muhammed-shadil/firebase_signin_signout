@@ -1,4 +1,5 @@
 import 'package:firebase_login/controller/auth_controller.dart';
+import 'package:firebase_login/view/screen/loginpage.dart';
 import 'package:firebase_login/view/widgets/custombutton1.dart';
 import 'package:firebase_login/view/widgets/customtextfield1.dart';
 import 'package:firebase_login/view/widgets/sizedbox20.dart';
@@ -29,7 +30,7 @@ Future<void> delete(email, context) async {
     context: context,
     builder: (context) {
       return AlertDialog(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.grey[300],
         contentPadding: const EdgeInsets.all(20),
         title: const Text(
           "Delete account",
@@ -42,11 +43,11 @@ Future<void> delete(email, context) async {
               children: [
                 CustomTextfield(
                     validator: (value) {
-                      if (value == null || value.isEmpty  ) {
+                      if (value == null || value.isEmpty) {
                         return "please enter correct email";
                       } else if (!regemail.hasMatch(value)) {
                         return "please enter a valid email";
-                      } else if (value!=email) {
+                      } else if (value != email) {
                         return "you entered wrong email";
                       }
                     },
@@ -81,24 +82,28 @@ Future<void> delete(email, context) async {
                   emailontroller.clear();
                   passcontroller.clear();
                 },
-                child: const Text('cancel'),
+                child: const Text('Cancel'),
               ),
               const SizedBox(
                 height: 10,
                 width: 20,
               ),
               ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white),
                   onPressed: () {
-                    if (
-                        formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       Authontification.deleteAccount(
                           emailontroller.text, passcontroller.text, context);
+                      print("delytettttttttttt");
+                      Navigator.popUntil(context, (route) => route.isFirst);
 
                       emailontroller.clear();
-                      Navigator.pop(context);
+                      passcontroller.clear();
                     }
                   },
-                  child: const Text('delete')),
+                  child: const Text('Delete')),
             ],
           )
         ],

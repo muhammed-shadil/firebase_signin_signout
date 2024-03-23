@@ -7,24 +7,25 @@ class Profiletile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(  top: 10),
-      child: Container(padding: const EdgeInsets.only(top: 10,left: 15,bottom: 10),
+      padding: const EdgeInsets.only(top: 10),
+      child: Container(
+        padding: const EdgeInsets.only(top: 10, left: 15, bottom: 10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: Colors.white12),
-       
+            borderRadius: BorderRadius.circular(20), color: Colors.white60),
         width: 400,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "$label",
-              style: const TextStyle(fontSize: 20, color: Colors.white38),
+              style: const TextStyle( color: Colors.black87,fontWeight: FontWeight.w600),
             ),
             const SizedBox(
               height: 5,
             ),
             Text(
               "$content",
-              style: const TextStyle(fontSize: 20, color: Colors.white),
+              style: const TextStyle( color: Colors.black),
             ),
           ],
         ),

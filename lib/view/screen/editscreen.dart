@@ -1,12 +1,13 @@
 import 'package:firebase_login/controller/auth_controller.dart';
 import 'package:firebase_login/view/screen/homepage.dart';
+import 'package:firebase_login/view/widgets/CUSTOMbutton2.dart';
 import 'package:firebase_login/view/widgets/custombutton1.dart';
 import 'package:firebase_login/view/widgets/customtextfield1.dart';
 import 'package:firebase_login/view/widgets/sizedbox20.dart';
 import 'package:flutter/material.dart';
 
-class SignupPage extends StatelessWidget {
-  SignupPage({super.key});
+class Editpage extends StatelessWidget {
+  Editpage({super.key});
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passcontroller = TextEditingController();
   TextEditingController agecontroller = TextEditingController();
@@ -25,26 +26,20 @@ class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          "EDIT",
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.transparent,
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
         height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            transform: GradientRotation(8),
-            colors: [
-              Color.fromARGB(255, 198, 9, 231),
-              Colors.deepPurple,
-              Colors.lightBlue,
-              Colors.indigo,
-            ],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          ),
-        ),
+        decoration: const BoxDecoration(),
         child: SingleChildScrollView(
           child: Form(
             key: formKey,
@@ -53,12 +48,29 @@ class SignupPage extends StatelessWidget {
                 const SizedBox(
                   height: 70,
                 ),
-                const Center(
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                Center(
+                    child: Stack(children: [
+                  const CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 50,
+                    child: Icon(
+                      Icons.person_4_outlined,
+                      color: Colors.black,
+                      size: 60,
+                    ),
                   ),
-                ),
+                  Positioned(
+                    bottom: -7,
+                    right: -7,
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.add_a_photo_outlined,
+                          size: 20,
+                          color: Colors.black,
+                        )),
+                  )
+                ])),
                 const SizedBox(
                   height: 30,
                 ),
@@ -127,20 +139,29 @@ class SignupPage extends StatelessWidget {
                     icon: Icons.calendar_month,
                     text: "AGE"),
                 const Sizedbox20(),
-                custombutton(
-                    text: "Sign up",
-                    onpressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        await Authontification.signup(
-                            agecontroller.text,
-                            phonecontroller.text,
-                            usernamecontroller.text,
-                            emailcontroller.text,
-                            passcontroller.text,
-                            context);
-                        // Navigator.pop(context);
-                      }
-                    }),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*.6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      custombutton2(
+                          text: "CANCEL",
+                          onpressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              // await Authontification.signup(
+                              //     agecontroller.text,
+                              //     phonecontroller.text,
+                              //     usernamecontroller.text,
+                              //     emailcontroller.text,
+                              //     passcontroller.text,
+                              //     context);
+                              // // Navigator.pop(context);
+                            }
+                          }),
+                      custombutton2(text: "UPDATE", onpressed: () {})
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

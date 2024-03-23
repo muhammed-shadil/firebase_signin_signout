@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login/model/user_model.dart';
 import 'package:firebase_login/view/screen/homepage.dart';
+import 'package:firebase_login/view/screen/homepageog.dart';
 import 'package:firebase_login/view/screen/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -16,19 +17,25 @@ class Authontification {
           content: Text("you are Logged in"),
         ),
       );
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushNamed(
+        context,
+        '/home',
+      );
     } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("No user Found with this email")),
-        );
-      } else if (e.code == 'invalid-credential') {
+      if (e.code == 'invalid-credential') {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("password did not match"),
-          ),
+              content: Text(
+                  "No user Found with this email or password did not match")),
         );
       }
+      //  else if (e.code == 'invalid-credential') {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text("password did not match"),
+      //     ),
+      //   );
+      // }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -57,6 +64,7 @@ class Authontification {
       usermode.age = age;
       usermode.phone = phone;
       usermode.username = username;
+
       await firebaseFirestore
           .collection("users")
           .doc(user.uid)
@@ -67,6 +75,7 @@ class Authontification {
           content: Text("Registeratered Successfully"),
         ),
       );
+      Navigator.pop(context);
     } on FirebaseException catch (e) {
       if (e.code == 'weak-password') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -96,26 +105,33 @@ class Authontification {
     AuthCredential credential =
         EmailAuthProvider.credential(email: email, password: pass);
     try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user!.uid)
+          .delete();
+      print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
       await user!.reauthenticateWithCredential(credential).then(
         (value) {
-          value.user!.delete().then(
-            (value) {
-              Navigator.pop(context);
+          value.user!.delete();
+          // .then(
+          //   (value) {
+              print("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("Account delete"),
+                  content: Text("Account deleted"),
+
                 ),
               );
-            },
-          );
+            // },
+          // );
         },
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error deleting account!${e.toString()}"),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text("Error deleting account!${e.toString()}"),
+      //   ),
+      // );
     }
   }
 
@@ -128,11 +144,10 @@ class Authontification {
                   content: Text("signout"),
                 ),
               ));
-      Navigator.pop(context);
 
       await GoogleSignIn().signOut();
 
-      print("sighnouteeeedddddddddddddd");
+      // print("sighnouteeeedddddddddddddd");
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -152,10 +167,11 @@ class Authontification {
             accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
+
         await saveUserFirestore(userCredential.user!, context);
 
         Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const Homepage()));
+            context, MaterialPageRoute(builder: (_) => const Homepages()));
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("login with google account"),
@@ -171,7 +187,7 @@ class Authontification {
     }
   }
 
-  static Future<void> saveUserFirestore(User user, BuildContext context) async {
+  static Future<void> saveUserFirestore(User user, context) async {
     try {
       CollectionReference userCollection =
           FirebaseFirestore.instance.collection('users');

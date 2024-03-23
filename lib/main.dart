@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_login/view/screen/editscreen.dart';
 import 'package:firebase_login/view/screen/homepage.dart';
+import 'package:firebase_login/view/screen/homepageog.dart';
 import 'package:firebase_login/view/screen/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
@@ -10,7 +12,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -26,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    
+
     user = FirebaseAuth.instance.currentUser;
   }
 
@@ -34,10 +36,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: user != null ? const Homepage() : loginpage()),
+      home: Scaffold(body: user != null ? Homepages() : loginpage()),
       routes: {
-        '/login':(context) => loginpage(),
-        '/home':(context) => Homepage(),
+        '/login': (context) => loginpage(),
+        '/home': (context) => Homepages(),
       },
     );
   }

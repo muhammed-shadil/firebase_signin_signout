@@ -21,7 +21,7 @@ class loginpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(25),
       height: MediaQuery.of(context).size.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -42,7 +42,7 @@ class loginpage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(
-                height: 220,
+                height: 200,
                 child: Center(
                   child: Text(
                     "LOG IN",
@@ -84,8 +84,9 @@ class loginpage extends StatelessWidget {
                       if (formKey.currentState!.validate()) {
                         Authontification.signin(
                             emailontroller.text, passcontroller.text, context);
-                            emailontroller.clear();
-                            passcontroller.clear();                       }
+                        emailontroller.clear();
+                        passcontroller.clear();
+                      }
                     }),
               ),
               const SizedBox(
@@ -115,10 +116,10 @@ class loginpage extends StatelessWidget {
                 ],
               ),
               const Sizedbox20(),
-               Row(
+              Row(
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width*.43,
+                    width: MediaQuery.of(context).size.width * .37,
                     child: const Divider(
                       color: Colors.white,
                     ),
@@ -128,7 +129,7 @@ class loginpage extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width*.41,
+                    width: MediaQuery.of(context).size.width * .37,
                     child: const Divider(
                       color: Colors.white,
                     ),
@@ -137,11 +138,15 @@ class loginpage extends StatelessWidget {
               ),
               const Sizedbox20(),
               Center(
-                child: GestureDetector(onTap: (){Authontification.signInWithGoogle(context);},
+                child: GestureDetector(
+                  onTap: () {
+                    Authontification.signInWithGoogle(context);
+                  },
                   child: Container(
                       width: 60,
                       height: 60,
-                      decoration: const BoxDecoration(color: Colors.amber,
+                      decoration: const BoxDecoration(
+                        
                         borderRadius: BorderRadius.all(Radius.circular(100)),
                       ),
                       child: const Image(

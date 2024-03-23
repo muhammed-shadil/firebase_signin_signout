@@ -18,16 +18,17 @@ class CustomTextfield extends StatelessWidget {
       controller: controller,
       validator: validator,
       cursorColor: Colors.white,
-      decoration: InputDecoration(errorMaxLines: 3,
+      decoration: InputDecoration(
+        errorMaxLines: 3,
         errorStyle: const TextStyle(color: Colors.white, fontSize: 16),
         prefixIcon: Icon(
           icon,
           color: Colors.white,
         ),
         hintText: text,
-        hintStyle: TextStyle(
-          fontSize: 20,
-          color: Colors.white.withOpacity(0.9),
+        hintStyle: const TextStyle(
+          fontSize: 15,
+          color: Colors.white,
         ),
         filled: true,
         fillColor: Colors.white.withOpacity(0.4),
