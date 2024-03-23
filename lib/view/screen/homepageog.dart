@@ -46,15 +46,15 @@ class _HomepagesState extends State<Homepages> {
                           snapshot.data!.docs[0].data() as Map<String, dynamic>;
                       final username = userData['username'];
                       return UserAccountsDrawerHeader(
-                        decoration: BoxDecoration(color: Colors.transparent),
+                        decoration: const BoxDecoration(color: Colors.transparent),
                         accountName: Text(
                           username.toString().toUpperCase(),
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                         ),
                         accountEmail: Text(
                           userData['email'],
                         ),
-                        currentAccountPictureSize: Size.square(50),
+                        currentAccountPictureSize: const Size.square(50),
                         currentAccountPicture: CircleAvatar(
                           radius: 30,
                           backgroundImage: NetworkImage(userData['image']),
@@ -99,8 +99,8 @@ class _HomepagesState extends State<Homepages> {
                           height: 5,
                         ),
                     itemCount: snapshot.data.docs.length,
-                    itemBuilder: (context, Index) {
-                      final userdata = snapshot.data!.docs[Index].data();
+                    itemBuilder: (context, index) {
+                      final userdata = snapshot.data!.docs[index].data();
 
                       final image = userdata['image'];
                       final ss = userdata['email'];
