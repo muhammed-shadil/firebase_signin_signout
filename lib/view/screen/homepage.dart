@@ -2,41 +2,44 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login/controller/auth_controller.dart';
 import 'package:firebase_login/controller/image_controler.dart';
-import 'package:firebase_login/model/user_model.dart';
 import 'package:firebase_login/view/screen/deletetepage.dart';
 import 'package:firebase_login/view/screen/editscreen.dart';
-import 'package:firebase_login/view/screen/loginpage.dart';
 import 'package:firebase_login/view/widgets/custombutton1.dart';
 import 'package:firebase_login/view/widgets/customcontainertile.dart';
+import 'package:firebase_login/view/widgets/signoutdialoge.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+class Profilepage extends StatefulWidget {
+  const Profilepage({super.key});
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  State<Profilepage> createState() => _ProfilepageState();
 }
 
 Authontification authentication = Authontification();
+bool _isLoading = false;
 
-class _HomepageState extends State<Homepage> {
+class _ProfilepageState extends State<Profilepage> {
   void selectImage(String? email) async {
+    setState(() {
+      _isLoading = true; // Set loading state to true while selecting image
+    });
     String? img = await pickImage(context, ImageSource.gallery, email);
     setState(() {
       imageUrl = img;
-      print(imageUrl);
+      _isLoading = false;
     });
   }
 
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   User? user = FirebaseAuth.instance.currentUser;
-  // usermodel usermode = usermodel();
-  @override
- 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor:Colors.grey[100] ,
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
@@ -54,28 +57,7 @@ class _HomepageState extends State<Homepage> {
         actions: [
           IconButton(
             onPressed: () async {
-              await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('signout'),
-                      content: const Text('do you want to signout'),
-                      actions: [
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('cancel')),
-                        TextButton(
-                            onPressed: () {
-                              authentication.signout(context);
-                              Navigator.popUntil(
-                                  context, (route) => route.isFirst);
-                            },
-                            child: Text("signout"))
-                      ],
-                    );
-                  });
+              await signoutdialoge(context);
             },
             icon: const Icon(
               Icons.login_outlined,
@@ -95,16 +77,19 @@ class _HomepageState extends State<Homepage> {
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(); // Show loading indicator while fetching user data
+                }
                 if (snapshot.hasData) {
                   final userData =
                       snapshot.data?.data() as Map<String, dynamic>?;
                   // final imageUrl = userData!['image'];
 
-                  var imageUrl = (userData as Map<String, dynamic>?)?["image"];
+                  var imageUrl = (userData)?["image"];
                   if (userData != null) {
                     return Column(
                       children: [
-                        Stack(children: [
+                        Stack(alignment: Alignment.center, children: [
                           imageUrl != null
                               ? CircleAvatar(
                                   radius: 70,
@@ -119,6 +104,11 @@ class _HomepageState extends State<Homepage> {
                                     size: 70,
                                   ),
                                 ),
+                          if (_isLoading)
+                            const Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.white,
+                            )),
                           Positioned(
                             bottom: -7,
                             right: -7,
@@ -199,7 +189,10 @@ class _HomepageState extends State<Homepage> {
                                         btncolor: Colors.red[300],
                                         text: "DELETE",
                                         onpressed: () {
-                                          delete(userData['email'], context);
+                                          delete(
+                                              userData['email'],
+                                              scaffoldKey
+                                                  .currentState!.context);
                                         }),
                                     const SizedBox(
                                       height: 15,
@@ -208,11 +201,13 @@ class _HomepageState extends State<Homepage> {
                                         btncolor: Colors.blue[200],
                                         text: "EDIT",
                                         onpressed: () async {
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) => Editpage()),
-                                              (Route<dynamic> route) => false);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => Editpage(
+                                                      userData1: userData,
+                                                    )),
+                                          );
                                         })
                                   ],
                                 ),

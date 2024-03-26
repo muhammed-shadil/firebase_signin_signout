@@ -1,14 +1,7 @@
 import 'package:firebase_login/controller/auth_controller.dart';
 import 'package:firebase_login/view/screen/loginpage.dart';
-import 'package:firebase_login/view/widgets/custombutton1.dart';
 import 'package:firebase_login/view/widgets/customtextfield1.dart';
-import 'package:firebase_login/view/widgets/sizedbox20.dart';
 import 'package:flutter/material.dart';
-
-// class DeleteButton extends StatelessWidget {
-//   DeleteButton({
-//     super.key,
-//   });
 
 final TextEditingController emailontroller = TextEditingController();
 final TextEditingController passcontroller = TextEditingController();
@@ -17,15 +10,8 @@ final regemail = RegExp(r"^[a-zA-Z0-9_\-\.\S]{4,}[@][a-z]+[\.][a-z]{2,3}$");
 final paswd =
     RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
 
-// @override
-// Widget build(BuildContext context) {
-//   return FloatingActionButton(
-//     child: const Icon(Icons.add),
-
-//     onPressed: () async {
-
 final formKey = GlobalKey<FormState>();
-Future<void> delete(email, context) async {
+Future<void> delete(email, BuildContext context) async {
   showDialog(
     context: context,
     builder: (context) {
@@ -49,6 +35,8 @@ Future<void> delete(email, context) async {
                         return "please enter a valid email";
                       } else if (value != email) {
                         return "you entered wrong email";
+                      } else {
+                        return null;
                       }
                     },
                     controller: emailontroller,
@@ -63,6 +51,8 @@ Future<void> delete(email, context) async {
                         return "please enter valid password";
                       } else if (!paswd.hasMatch(value)) {
                         return 'Password should contain at least one upper case, \n one lower case, one digit, one special character and \n must be 8 characters in length';
+                      } else {
+                        return null;
                       }
                     },
                     controller: passcontroller,
@@ -96,9 +86,12 @@ Future<void> delete(email, context) async {
                     if (formKey.currentState!.validate()) {
                       Authontification.deleteAccount(
                           emailontroller.text, passcontroller.text, context);
-                      print("delytettttttttttt");
-                      Navigator.popUntil(context, (route) => route.isFirst);
 
+                      // Navigator.popUntil(context, (route) => route.isFirst);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (_) => loginpage()),
+                          (route) => false);
                       emailontroller.clear();
                       passcontroller.clear();
                     }
@@ -111,6 +104,3 @@ Future<void> delete(email, context) async {
     },
   );
 }
-//     );
-//   }
-// }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login/view/screen/homepage.dart';
+import 'package:firebase_login/view/widgets/signoutdialoge.dart';
 import 'package:flutter/material.dart';
 
 class Homepages extends StatefulWidget {
@@ -19,7 +20,7 @@ class _HomepagesState extends State<Homepages> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.black,
         title: const Text(
           'All user',
@@ -38,30 +39,35 @@ class _HomepagesState extends State<Homepages> {
                   image: DecorationImage(
                       image: AssetImage("assets/bck.jpeg"), opacity: 0.6),
                 ),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: user.snapshots(),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: user.doc(userss!.uid).snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final userData =
-                          snapshot.data!.docs[0].data() as Map<String, dynamic>;
-                      final username = userData['username'];
+                          snapshot.data!.data() as Map<String, dynamic>?;
+                      final username = userData!['username'];
                       return UserAccountsDrawerHeader(
-                        decoration: const BoxDecoration(color: Colors.transparent),
-                        accountName: Text(
-                          username.toString().toUpperCase(),
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        accountEmail: Text(
-                          userData['email'],
-                        ),
-                        currentAccountPictureSize: const Size.square(50),
-                        currentAccountPicture: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: NetworkImage(userData['image']),
-                        ),
-                      );
+                          decoration:
+                              const BoxDecoration(color: Colors.transparent),
+                          accountName: Text(
+                            username.toString().toUpperCase(),
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                          accountEmail: Text(
+                            userData['email'],
+                          ),
+                          currentAccountPictureSize: const Size.square(50),
+                          currentAccountPicture: userData['image'] != null
+                              ? CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage:
+                                      NetworkImage(userData['image']),
+                                )
+                              : const CircleAvatar(
+                                  child: Icon(Icons.person_3_outlined),
+                                ));
                     }
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   },
                 ),
               ),
@@ -76,15 +82,39 @@ class _HomepagesState extends State<Homepages> {
                 leading: const Icon(Icons.person_4_outlined),
                 title: const Text(' my profile '),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const Profilepage()));
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text(' settings '),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.settings),
+                      title: const Text(' settings '),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    SizedBox(
+                      width: 180,
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          await signoutdialoge(context);
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("SIGN OUT "),
+                            Icon(Icons.login_outlined)
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ],
           )),
@@ -103,14 +133,16 @@ class _HomepagesState extends State<Homepages> {
                       final userdata = snapshot.data!.docs[index].data();
 
                       final image = userdata['image'];
-                      final ss = userdata['email'];
+
                       return GestureDetector(
                         onTap: () {
                           // print("user      dfdfdfdfdid    ${userss!.email}");
 
-                          if (userss!.email == userdata['email']) {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (_) => Homepage()));
+                          if (userss!.uid == userdata['uid']) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const Profilepage()));
                           }
 
                           // print("userdid   ${ss}");

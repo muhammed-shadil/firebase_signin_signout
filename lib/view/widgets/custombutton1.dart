@@ -4,7 +4,8 @@ class custombutton extends StatelessWidget {
   const custombutton({
     super.key,
     required this.text,
-    required this.onpressed, this.btncolor,
+    required this.onpressed,
+    this.btncolor,
   });
   final String text;
   final Color? btncolor;
@@ -12,11 +13,15 @@ class custombutton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(fixedSize: const Size(400, 50),backgroundColor:btncolor),
+      style: ElevatedButton.styleFrom(
+          fixedSize: const Size(400, 50),
+          foregroundColor: btncolor,
+          ),
       onPressed: onpressed,
       child: Text(
         text,
-        style: const TextStyle( fontWeight: FontWeight.bold,color: Colors.black),
+        style:
+            const TextStyle(fontWeight: FontWeight.w900,),
       ),
     );
   }
